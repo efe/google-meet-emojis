@@ -6,6 +6,7 @@ function handleKeyPress(event) {
     handleDoublePress(event.key, 'a', findClapImage);
     handleDoublePress(event.key, 'p', findPartyImage);
     handleDoublePress(event.key, 'h', findHeartImage);
+    handleDoublePress(event.key, 'l', copyUrlToClipboard);
 }
 
 // Generic function to handle double key presses
@@ -100,4 +101,14 @@ function clickImageOf(findImageFn) {
             console.error('Mood icon not found.');
         }
     }
+}
+
+// Function to copy the current URL to the clipboard
+function copyUrlToClipboard() {
+    const url = window.location.href; // Get the current URL
+    navigator.clipboard.writeText(url).then(() => {
+        console.log('URL copied to clipboard:', url);
+    }).catch(err => {
+        console.error('Failed to copy URL to clipboard:', err);
+    });
 }
