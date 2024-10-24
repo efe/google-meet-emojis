@@ -1,27 +1,31 @@
-let lastKeyTime = 0;
+let lastKeyTimeU = 0;
+let lastKeyTimeD = 0;
 
 function handleKeyPress(event) {
-    // Check if the pressed key is 'u' or 'U'
+    const currentTime = new Date().getTime();
+
+    // Check if the pressed key is 'u' or 'U' for thumbs up
     if (event.key === 'u' || event.key === 'U') {
-        const currentTime = new Date().getTime();
-
-        // Check if the time between key presses is less than 500 milliseconds
-        if (currentTime - lastKeyTime < 500) {
-            // If it's a double press within the time frame, call the function
-            clickThumbsUpImage();
+        if (currentTime - lastKeyTimeU < 500) {
+            clickImageOf(findThumbsUpImage);
         }
+        lastKeyTimeU = currentTime;
+    }
 
-        // Update the last key press time
-        lastKeyTime = currentTime;
+    // Check if the pressed key is 'd' or 'D' for thumbs down
+    if (event.key === 'd' || event.key === 'D') {
+        if (currentTime - lastKeyTimeD < 500) {
+            clickImageOf(findThumbsDownImage);
+        }
+        lastKeyTimeD = currentTime;
     }
 }
 
 // Add event listener for keydown
 document.addEventListener('keydown', handleKeyPress);
 
-// Your clickThumbsUpImage function
-function clickThumbsUpImage() {
-    // Array of possible thumbs-up emoji with different skin tones
+// Method to find the thumbs-up image (for any skin tone)
+function findThumbsUpImage() {
     const thumbsUpVariants = [
         '👍',  // default
         '👍🏻', // light skin tone
@@ -31,13 +35,33 @@ function clickThumbsUpImage() {
         '👍🏿'  // dark skin tone
     ];
 
-    // Find the thumbs-up image by iterating over the possible alt values
-    let thumbsUpImage = thumbsUpVariants
+    return thumbsUpVariants
         .map(variant => document.querySelector(`img[alt="${variant}"]`))
-        .find(image => image !== null);  // Find the first non-null image
-    
-    if (thumbsUpImage) {
-        thumbsUpImage.click();
+        .find(image => image !== null);
+}
+
+// Method to find the thumbs-down image (for any skin tone)
+function findThumbsDownImage() {
+    const thumbsDownVariants = [
+        '👎',  // default
+        '👎🏻', // light skin tone
+        '👎🏼', // medium-light skin tone
+        '👎🏽', // medium skin tone
+        '👎🏾', // medium-dark skin tone
+        '👎🏿'  // dark skin tone
+    ];
+
+    return thumbsDownVariants
+        .map(variant => document.querySelector(`img[alt="${variant}"]`))
+        .find(image => image !== null);
+}
+
+// Generic function to click the image (e.g., thumbs up or down) and retry after clicking the mood icon
+function clickImageOf(findImageFn) {
+    let image = findImageFn();
+
+    if (image) {
+        image.click();
     } else {
         let moodIcon = Array.from(document.querySelectorAll('i.google-material-icons-filled'))
             .find(icon => icon.textContent.trim() === "mood");
@@ -45,16 +69,15 @@ function clickThumbsUpImage() {
         if (moodIcon) {
             moodIcon.click();
 
+            // Retry after clicking the mood icon
             setTimeout(() => {
-                let thumbsUpImage = thumbsUpVariants
-                .map(variant => document.querySelector(`img[alt="${variant}"]`))
-                .find(image => image !== null);  // Find the first non-null image
-                if (thumbsUpImage) {
-                    thumbsUpImage.click();
+                image = findImageFn();
+                if (image) {
+                    image.click();
                 } else {
-                    console.error('Thumbs up image not found even after clicking mood icon.');
+                    console.error('Image not found even after clicking mood icon.');
                 }
-            }, 500);
+            }, 1000); // wait for the DOM to update after clicking
         } else {
             console.error('Mood icon not found.');
         }
