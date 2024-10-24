@@ -1,23 +1,30 @@
-let lastKeyTimeU = 0;
-let lastKeyTimeD = 0;
+let lastKeyTime = {};
 
 function handleKeyPress(event) {
+    handleDoublePress(event.key, 'u', findThumbsUpImage);
+    handleDoublePress(event.key, 'd', findThumbsDownImage);
+    handleDoublePress(event.key, 'a', findClapImage);
+    handleDoublePress(event.key, 'p', findPartyImage);
+    handleDoublePress(event.key, 'h', findHeartImage);
+}
+
+// Generic function to handle double key presses
+function handleDoublePress(pressedKey, targetKey, findImageFn) {
     const currentTime = new Date().getTime();
 
-    // Check if the pressed key is 'u' or 'U' for thumbs up
-    if (event.key === 'u' || event.key === 'U') {
-        if (currentTime - lastKeyTimeU < 500) {
-            clickImageOf(findThumbsUpImage);
-        }
-        lastKeyTimeU = currentTime;
+    // Initialize last key press time for the target key
+    if (!lastKeyTime[targetKey]) {
+        lastKeyTime[targetKey] = 0;
     }
 
-    // Check if the pressed key is 'd' or 'D' for thumbs down
-    if (event.key === 'd' || event.key === 'D') {
-        if (currentTime - lastKeyTimeD < 500) {
-            clickImageOf(findThumbsDownImage);
+    // Check if the pressed key matches the target key (case-insensitive)
+    if (pressedKey.toLowerCase() === targetKey) {
+        if (currentTime - lastKeyTime[targetKey] < 500) {
+            // If it's a double press within the time frame, call clickImageOf
+            clickImageOf(findImageFn);
         }
-        lastKeyTimeD = currentTime;
+        // Update the last key press time for the target key
+        lastKeyTime[targetKey] = currentTime;
     }
 }
 
@@ -27,36 +34,47 @@ document.addEventListener('keydown', handleKeyPress);
 // Method to find the thumbs-up image (for any skin tone)
 function findThumbsUpImage() {
     const thumbsUpVariants = [
-        '👍',  // default
-        '👍🏻', // light skin tone
-        '👍🏼', // medium-light skin tone
-        '👍🏽', // medium skin tone
-        '👍🏾', // medium-dark skin tone
-        '👍🏿'  // dark skin tone
+        '👍', '👍🏻', '👍🏼', '👍🏽', '👍🏾', '👍🏿'
     ];
-
-    return thumbsUpVariants
-        .map(variant => document.querySelector(`img[alt="${variant}"]`))
-        .find(image => image !== null);
+    return findEmojiImage(thumbsUpVariants);
 }
 
 // Method to find the thumbs-down image (for any skin tone)
 function findThumbsDownImage() {
     const thumbsDownVariants = [
-        '👎',  // default
-        '👎🏻', // light skin tone
-        '👎🏼', // medium-light skin tone
-        '👎🏽', // medium skin tone
-        '👎🏾', // medium-dark skin tone
-        '👎🏿'  // dark skin tone
+        '👎', '👎🏻', '👎🏼', '👎🏽', '👎🏾', '👎🏿'
     ];
+    return findEmojiImage(thumbsDownVariants);
+}
 
-    return thumbsDownVariants
+// Method to find the clap emoji (for any skin tone)
+function findClapImage() {
+    const clapVariants = [
+        '👏', '👏🏻', '👏🏼', '👏🏽', '👏🏾', '👏🏿'
+    ];
+    return findEmojiImage(clapVariants);
+}
+
+// Method to find the party emoji
+function findPartyImage() {
+    const partyVariants = ['🎉'];
+    return findEmojiImage(partyVariants);
+}
+
+// Method to find the heart emoji
+function findHeartImage() {
+    const heartVariants = ['💖'];
+    return findEmojiImage(heartVariants);
+}
+
+// Utility method to find the emoji image based on a list of variants
+function findEmojiImage(emojiVariants) {
+    return emojiVariants
         .map(variant => document.querySelector(`img[alt="${variant}"]`))
         .find(image => image !== null);
 }
 
-// Generic function to click the image (e.g., thumbs up or down) and retry after clicking the mood icon
+// Generic function to click the image (e.g., thumbs up, thumbs down, etc.) and retry after clicking the mood icon
 function clickImageOf(findImageFn) {
     let image = findImageFn();
 
