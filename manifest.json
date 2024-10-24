@@ -4,8 +4,8 @@
   "version": "1.0",
   "description": "React emojis easily in Google Meet.",
   "icons": {
-    "48": "images/icon-48.png",
-    "128": "images/icon-128.png"
+    "48": "icons/48.png",
+    "128": "icons/128.png"
   },
   "permissions": [
     "activeTab",
