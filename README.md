@@ -1,4 +1,4 @@
-# Google Meets Emojis
+# Google Meet Emojis
 
 A Google Chrome extension that triggers actions **on double key presses**. It clicks emojis like thumbs-up, thumbs-down, clap, party, or heart emojis, or copies the current URL to the clipboard based on the key pressed.
 
