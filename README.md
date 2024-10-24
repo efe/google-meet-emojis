@@ -1,12 +1,12 @@
 # Google Meets Emojis
 
-A Google Chrome extension that triggers actions on double key presses. It clicks emojis like thumbs-up, thumbs-down, clap, party, or heart emojis, or copies the current URL to the clipboard based on the key pressed.
+A Google Chrome extension that triggers actions **on double key presses**. It clicks emojis like thumbs-up, thumbs-down, clap, party, or heart emojis, or copies the current URL to the clipboard based on the key pressed.
 
 ## Usage
 
 - **U:** Thumbs-up emoji (👍) variants.
 - **D:** Thumbs-down emoji (👎) variants.
-- **A:** Applose emoji (👏) variants.
+- **A:** Applause emoji (👏) variants.
 - **P:** Party emoji (🎉).
 - **H:** Heart emoji (💖).
 - **L:** Copies the current URL to the clipboard.
