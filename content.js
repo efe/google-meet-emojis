@@ -1,6 +1,11 @@
 let lastKeyTime = {};
 
 function handleKeyPress(event) {
+    // Check if the user is typing in an input, textarea, or contenteditable element
+    if (isTextInputActive()) {
+        return; // Do nothing if the cursor is in a text input field
+    }
+
     handleDoublePress(event.key, 'u', findThumbsUpImage);
     handleDoublePress(event.key, 'd', findThumbsDownImage);
     handleDoublePress(event.key, 'a', findClapImage);
@@ -31,6 +36,15 @@ function handleDoublePress(pressedKey, targetKey, findImageFn) {
 
 // Add event listener for keydown
 document.addEventListener('keydown', handleKeyPress);
+
+// Utility function to check if a text input field is active
+function isTextInputActive() {
+    const activeElement = document.activeElement;
+    const isInput = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+    const isEditable = activeElement.contentEditable === "true";
+
+    return isInput || isEditable;
+}
 
 // Method to find the thumbs-up image (for any skin tone)
 function findThumbsUpImage() {
